@@ -167,15 +167,50 @@ It is also important how many objects of each class are in the dataset. Below is
 #### Cross validation
 In order for the model to generalize well, the dataset should be randomly distributed. It is divided into 80% train, 20% validation, 20% test. in this project create_split.py provides random distribution of dataset. 
 
+#### Edit the config file
+
+Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on config files. The config that we will use for this project is pipeline.config, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector here.
+
+First, let's download the [pretrained model](download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to training/pretrained-models/.
+
+Now we need to edit the config files to change the location of the training and validation files, as well as the location of the label_map file, pretrained weights. We also need to adjust the batch size. To do so, run the following:
+``` 
+python edit_config.py --train_dir app/project/data/train/ --eval_dir app/project/data/val/ --batch_size 4 --checkpoint ./training/pretrained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map label_map.pbtxt  
+```
+A new config file has been created, pipeline_new.config. Moved pipeline_new.config to `/training/reference/` file path.
 
 ### Training 
-#### Reference experiment
+
 The residual network model (Resnet), model loss is shown below:
+* a training process:
+```
+python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config
+
+```
+* an evaluation process:
+```
+python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config --checkpoint_dir=training/reference/
+```
+
+* To monitor the training, you can launch a tensorboard instance by running tensorboard --logdir=training. And these are my results.
 
 <img src="img/Screenshot from 2021-11-05 14-57-24.png" alt="data"/>
+
+Here it shows the error in classification classification loss. In other words, we can see how successful the model is in classifying the objects it detects by looking here. On the other hand, we see the error of localization loss in correctly locating the objects detected by our model. ( In the `ssd_resnet_50` model we use, the resnet model makes classification, while the SSD algorithm provides the location of the objects.) The total loss shows us what our total error is in these two.
 
 Training continued until we were sure that the loss was sufficiently low. In addition, it was ensured that there was no overtrain and the training was completed at a point where the loss did not start to increase.
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
- 
+To increase model success, applying augmentation to the dataset is a good option. Augmentation increases the diversity of the dataset. In order for our model to generalize well, it should be trained with images of the object in as many different conditions as possible. Augmentation aims to diversify the dataset by making applications such as playing with the luminance level of the images, adding blur, zooming and rotating the object.
+
+Below are the images augmented by playing with the luminance level. For example, adding these data to the dataset enables objects to be detected in environments where the level of light is high and low.
+
+
+<img src="img/dark.png" alt="data"/>
+
+
+<img src="img/light.png" alt="data"/>
+
+
+
+
