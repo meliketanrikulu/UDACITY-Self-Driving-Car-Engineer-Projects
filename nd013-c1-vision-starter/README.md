@@ -124,10 +124,29 @@ python inference_video.py -labelmap_path label_map.pbtxt --model_path training/e
 ## Submission Template
 
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+Our goal in this project is to identify objects (vehicle, pedestrian, cyclist) that may be important for autonomous driving. Deep learning algorithms are used to detect objects. Deep learning algorithms are more successful in object detection than image processing and classical machine learning algorithms. The biggest reason for this is that feature extraction in deep learning models is done with artificial neural networks (convolutional layers). 
+
+The dataset used for this purpose is Waymo which can be downloaded from the [Google Cloud Storage Bucket]((https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) In this case, we will be using tfrecord files which we will be modified into tf.Train.Example for the object detection api format. We will also be splitting the dataset into training, validation and testing sets using np.split in "create_splits.py" python program.
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+As mentioned in the project rubrics, GPU compatible system should be present for this. In my case, I have used Nvidia Geforce RTX A4000.
+
+   * First the project files should be downloaded through git clone from [this](https://github.com/udacity/nd013-c1-vision-starter) repository
+   * Navigate to the root directory of the project and use the docker file and requirements.txt from the "build" directory
+   * The following command should be run from inside the "build" directory:
+    ``` docker build -t project-dev -f Dockerfile .```
+   * Then we create a docker container to run the created image.
+    ``` docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash```
+   * Inside the container, we can use the gsutil command to download the tfrecord from cloud storage:
+    ``` curl https://sdk.cloud.google.com | bash```
+   -Authentication can be done using
+   ```
+    pip install tensorflow-gpu==2.3.0
+    pip install numpy
+    pip install pandas
+    pip install matplotlib
+    pip install seaborn 
+    ```
 
 ### Dataset
 #### Dataset analysis
