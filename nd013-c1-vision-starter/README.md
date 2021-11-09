@@ -201,6 +201,7 @@ Here it shows the error in classification classification loss. In other words, w
 Training continued until we were sure that the loss was sufficiently low. In addition, it was ensured that there was no overtrain and the training was completed at a point where the loss did not start to increase.
 
 #### Improve on the reference
+###### Augmentation
 To increase model success, applying augmentation to the dataset is a good option. Augmentation increases the diversity of the dataset. In order for our model to generalize well, it should be trained with images of the object in as many different conditions as possible. Augmentation aims to diversify the dataset by making applications such as playing with the luminance level of the images, adding blur, zooming and rotating the object.
 
 Below are the images augmented by playing with the luminance level. For example, adding these data to the dataset enables objects to be detected in environments where the level of light is high and low.
@@ -211,6 +212,11 @@ Below are the images augmented by playing with the luminance level. For example,
 
 <img src="img/light.png" alt="data"/>
 
+###### Dataset Distribution
+In addition, the distribution of the dataset by classes is also important in order to improve the quality of training. When we visualize the distribution of the dataset, we see that the number of vehicles in the dataset is much higher than the other classes (pedestrian and cyclist). This is a problem.
+It is also important how many objects of each class are in the dataset. Below is the distribution of the dataset according to the classes.
 
+<img src="img/3.png" alt="data"/>
 
+In order to increase the quality of education, the distribution of classes in the data set should be approximated.
 
