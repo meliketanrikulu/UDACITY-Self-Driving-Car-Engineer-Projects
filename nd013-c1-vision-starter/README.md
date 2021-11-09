@@ -160,7 +160,9 @@ In the dataset, we have to fit rectangular bounding boxes on the images with obj
 
 <img src="img/index.png" alt="dataset2"/>
 
+It is also important how many objects of each class are in the dataset. Below is the distribution of the dataset according to the classes.
 
+<img src="img/3.png" alt="data"/>
 
 #### Cross validation
 In order for the model to generalize well, the dataset should be randomly distributed. It is divided into 80% train, 20% validation, 20% test. in this project create_split.py provides random distribution of dataset. 
@@ -168,7 +170,11 @@ In order for the model to generalize well, the dataset should be randomly distri
 
 ### Training 
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+The residual network model (Resnet), model loss is shown below:
+
+<img src="img/Screenshot from 2021-11-05 14-57-24.png" alt="data"/>
+
+Training continued until we were sure that the loss was sufficiently low. In addition, it was ensured that there was no overtrain and the training was completed at a point where the loss did not start to increase.
 
 #### Improve on the reference
 This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
