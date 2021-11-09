@@ -218,5 +218,5 @@ It is also important how many objects of each class are in the dataset. Below is
 
 <img src="img/3.png" alt="data"/>
 
-In order to increase the quality of education, the distribution of classes in the data set should be approximated.
+In order to increase the quality of training, the distribution of classes in the data set should be approximated.
 
