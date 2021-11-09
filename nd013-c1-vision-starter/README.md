@@ -154,8 +154,16 @@ As mentioned in the project rubrics, GPU compatible system should be present for
 
 ### Dataset
 #### Dataset analysis
-In the dataset, we have to fit rectangular bounding boxes on the images with objects ,which includes pedestrians, cyclists and cars.Images are taken from different places, and different weather conditions and at different time of the day (day/night).The image set contains diverse set of images of which some are blurry, clear, light and some are dark. A sample image in dark and foggy background is provided below#### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+In the dataset, we have to fit rectangular bounding boxes on the images with objects ,which includes pedestrians, cyclists and cars.Images are taken from different places, and different weather conditions and at different time of the day (day/night).The image set contains diverse set of images of which some are blurry, clear, light and some are dark. A sample image in dark and foggy background is provided below
+
+<img src="img/1.png" alt="dataset"/>
+
+<img src="img/index.png" alt="dataset2"/>
+
+
+
+#### Cross validation
+In order for the model to generalize well, the dataset should be randomly distributed. It is divided into 80% train, 20% validation, 20% test. in this project create_split.py provides random distribution of dataset. 
 
 
 ### Training 
