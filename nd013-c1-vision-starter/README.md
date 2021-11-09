@@ -136,9 +136,13 @@ As mentioned in the project rubrics, GPU compatible system should be present for
    * The following command should be run from inside the "build" directory:
     ``` docker build -t project-dev -f Dockerfile .```
    * Then we create a docker container to run the created image.
-    ``` docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash```
+    ``` 
+    docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash
+   ```
    * Inside the container, we can use the gsutil command to download the tfrecord from cloud storage:
-    ``` curl https://sdk.cloud.google.com | bash```
+    ``` 
+    curl https://sdk.cloud.google.com | bash
+   ```
    -Authentication can be done using
    ```
     pip install tensorflow-gpu==2.3.0
@@ -146,13 +150,13 @@ As mentioned in the project rubrics, GPU compatible system should be present for
     pip install pandas
     pip install matplotlib
     pip install seaborn 
-    ```
+   ```
 
 ### Dataset
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-#### Cross validation
+In the dataset, we have to fit rectangular bounding boxes on the images with objects ,which includes pedestrians, cyclists and cars.Images are taken from different places, and different weather conditions and at different time of the day (day/night).The image set contains diverse set of images of which some are blurry, clear, light and some are dark. A sample image in dark and foggy background is provided below#### Cross validation
 This section should detail the cross validation strategy and justify your approach.
+
 
 ### Training 
 #### Reference experiment
