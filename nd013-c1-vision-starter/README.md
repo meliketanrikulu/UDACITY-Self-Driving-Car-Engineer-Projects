@@ -194,15 +194,15 @@ python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_
 
 * To monitor the training, you can launch a tensorboard instance by running tensorboard --logdir=training. And these are my results.
 
-<img src="img/Screenshot from 2021-11-05 14-57-24.png" alt="data"/>
+<img src="img/exp0.png" alt="data"/>
 
 Here it shows the error in classification classification loss. In other words, we can see how successful the model is in classifying the objects it detects by looking here. On the other hand, we see the error of localization loss in correctly locating the objects detected by our model. ( In the `ssd_resnet_50` model we use, the resnet model makes classification, while the SSD algorithm provides the location of the objects.) The total loss shows us what our total error is in these two.
 
 Training continued until we were sure that the loss was sufficiently low. In addition, it was ensured that there was no overtrain and the training was completed at a point where the loss did not start to increase.
 
-#### Experiment 0: Reference experiment
+#### Reference experiment
 
-The reference experiment uses the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` pretrained model as a baseline and uses the default training parameters in the `pipeline.config`. Due to the limited memory of the GPU card, we can only run the training process and the evaluation process sequentially.
+The reference experiment uses the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` pretrained model as a baseline and uses the default training parameters in the `pipeline.config`. Due to the limited memory of the GPU card, we made batch size 2.
 
 The following Tensorboard chart illustrate the training process:
 <img src="img/exp0.png" alt="data"/>
@@ -210,32 +210,34 @@ The following Tensorboard chart illustrate the training process:
 
 #### Experiment 1: Resnet 101
 
-In this experiment, a deeper network `ssd_resnet101_v1_fpn_640x640_coco17_tpu-8` is used to replace Resnet50, otherwise it's the same as experiment #2. Theoretically, the model should perform better than its shallow counterpart.
+In this experiment, a deeper network `ssd_resnet101_v1_fpn_640x640_coco17_tpu-8` is used to replace Resnet50, otherwise it's the same as experiment #2. We expect training with this model to yield better results.
 
 The actually training process is as follows, the baseline being orange.
 
 <img src="img/exp1.png" alt="data"/>
 
-The training converges badly. The regularization loss is too high and dominant, and the model has a hard time to overcome its impact. This is indicative of poor hyperparameter selection.
+Train is badly combined.  The regularization loss is too high and the model has a hard time to overcome its impact. So we look again at hyperparameters.
 
 #### Experiment 2: Resnet 101 new configuration
 
-In this experiment, a few changes are made versus experiment 4: 1) regularizer weight is reduced from 0.0004 to 0.00004; 2) learning_rate_base is reduced from 0.04 to 0.01; 3) warmup_learning_rate is reduced from 0.013333 to 0.005; 4) color distortion transformation is removed (this is not intentional). The purpose is to temper the regularization loss and to avoid divergence due to high learning rate.
+A few changes are made.
+*  1) color distortion transformation is removed. <br/>
+*  2) warmup_learning_rate is reduced from 0.013333 to 0.005;
+*  3) regularizer weight is reduced from 0.0004 to 0.00004;
 
-The training progress is as follows, the baseline being orange.
+The loss graphs after these adjustments are given below.
 
 <img src="img/exp2.png" alt="data"/>
 
-The changes make a huge difference, as training coverges much fast than experiment 4 and also the baseline.
+#### Important Points
 
-#### Improve the performances
-
-Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The preprocessor.proto file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: Explore augmentations.ipynb. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup.
+Correct selection of hyperparameters is very critical when training.
 
 Keep in mind that the following are also available:
 
     * experiment with the optimizer: type of optimizer, learning rate, scheduler etc
     * experiment with the architecture. The Tf Object Detection API model zoo offers many architectures. Keep in mind that the pipeline.config file is unique for each architecture and you will have to edit it.
+    * In training, choose the batch size as large as possible. (This app has not been tested. This information is transferred based on literature reviews and previous experiences.)
     
 #### Creating an animation
 
