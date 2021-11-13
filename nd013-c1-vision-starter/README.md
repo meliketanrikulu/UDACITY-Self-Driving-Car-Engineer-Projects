@@ -241,7 +241,7 @@ Keep in mind that the following are also available:
     
 #### Creating an animation
 
-Export the trained model
+Export the trained model. Now we can test it on real images.
 
 Modify the arguments of the following function to adjust it to your models:
 ```
