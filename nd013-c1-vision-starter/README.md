@@ -223,7 +223,7 @@ I did this by adding the following lines to the configuration file.
 
 <img src="training/resnet50_augmentation/Screenshot from 2021-11-17 12-19-31.png" alt="data"/>
 
-This change was made using the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` model used in my reference network. It is seen that the loss decreases faster when augmentation is applied.
+random_distort_color could help combat against color space distortions such as lighting. This change was made using the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` model used in my reference network. It is seen that the loss decreases faster when augmentation is applied.
 
 <img src="training/resnet50_augmentation/50_augment.png" alt="data"/>
 
