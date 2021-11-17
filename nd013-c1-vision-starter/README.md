@@ -181,6 +181,8 @@ A new config file has been created, pipeline_new.config. Moved pipeline_new.conf
 
 ### Training 
 
+The reference experiment uses the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` pretrained model as a baseline and uses the default training parameters in the `pipeline.config`. 
+
 The residual network model (Resnet), model loss is shown below:
 * a training process:
 ```
@@ -194,40 +196,36 @@ python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_
 
 * To monitor the training, you can launch a tensorboard instance by running tensorboard --logdir=training. And these are my results.
 
-<img src="img/exp0.png" alt="data"/>
+<img src="training/reference50/training.png" alt="data"/>
 
 Here it shows the error in classification classification loss. In other words, we can see how successful the model is in classifying the objects it detects by looking here. On the other hand, we see the error of localization loss in correctly locating the objects detected by our model. ( In the `ssd_resnet_50` model we use, the resnet model makes classification, while the SSD algorithm provides the location of the objects.) The total loss shows us what our total error is in these two.
 
 Training continued until we were sure that the loss was sufficiently low. In addition, it was ensured that there was no overtrain and the training was completed at a point where the loss did not start to increase.
 
-#### Reference experiment
-
-The reference experiment uses the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` pretrained model as a baseline and uses the default training parameters in the `pipeline.config`. Due to the limited memory of the GPU card, we made batch size 2.
-
-The following Tensorboard chart illustrate the training process:
-<img src="img/exp0.png" alt="data"/>
-
-
 #### Experiment 1: Resnet 101
 
-In this experiment, a deeper network `ssd_resnet101_v1_fpn_640x640_coco17_tpu-8` is used to replace Resnet50, otherwise it's the same as experiment #2. We expect training with this model to yield better results.
+In this experiment, a deeper network `ssd_resnet101_v1_fpn_640x640_coco17_tpu-8` is used to replace Resnet50. As can be seen in the loss chart below, it is seen that the total loss decreases faster. 
 
 The actually training process is as follows, the baseline being orange.
 
-<img src="img/exp1.png" alt="data"/>
+<img src="training/resnet101/resnet101.png" alt="data"/>
 
-Train is badly combined.  The regularization loss is too high and the model has a hard time to overcome its impact. So we look again at hyperparameters.
+#### Experiment 2: Resnet 152
 
-#### Experiment 2: Resnet 101 new configuration
+In this experiment, a deeper network `ssd_resnet152_v1_fpn_640x640_coco17_tpu-8` is used to replace Resnet101. We expect training with this model to yield better results. As can be seen in the loss chart below, it is seen that the total loss decreases faster. 
 
-A few changes are made.
-*  1) color distortion transformation is removed. <br/>
-*  2) warmup_learning_rate is reduced from 0.013333 to 0.005;
-*  3) regularizer weight is reduced from 0.0004 to 0.00004;
+<img src="training/resnet152/resnet152.png" alt="data"/>
 
-The loss graphs after these adjustments are given below.
+#### Experiment 3: Augmentation
 
-<img src="img/exp2.png" alt="data"/>
+For the model to learn well, the dataset should represent as many different scenarios as possible. For this purpose, the duplication of the data set with applications such as the luminance level, rotation, and cutting of a part of the image is called augmentation. Random_horizontal_flip and random_crop_image augmentations were applied in the original config file of the model. In addition, I did the training by applying random_distort_color and observed the results.
+I did this by adding the following lines to the configuration file.
+
+<img src="training/resnet50_augmentation/Screenshot from 2021-11-17 12-19-31.png" alt="data"/>
+
+This change was made using the `ssd_resnet50_v1_fpn_640x640_coco17_tpu-8` model used in my reference network. It is seen that the loss decreases faster when augmentation is applied.
+
+<img src="training/resnet50_augmentation/50_augment.png" alt="data"/>
 
 #### Important Points
 
