@@ -67,7 +67,7 @@ Point cloud images
 <img src="img/x7.png" alt="x7"/>
 <img src="img/x8.png" alt="x8"/>
 
-Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud.
+Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud. Above you can see how different vehicles look in point cloud. You can see that there are some losses in the lidar data in the light-permeable areas such as the windows of the vehicles.
 
 ## Step-2: Creaate BEV from Lidar PCL
 
