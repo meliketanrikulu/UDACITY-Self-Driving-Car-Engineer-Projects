@@ -108,7 +108,7 @@ A sample preview of the bounding box images:  </br>
 
 ## Step-4: Performance detection for 3D Object Detection
 
-In this step, the performance is computed by getting the IOU between labels and detections to get the false positive and false negative values.The task is to compute the geometric overlap between the bounding boxes of labels and the detected objects:
+In this step, performance is calculated by taking the IOU between tags and detections to get false positive and false negative values. The IOU is a parameter that determines how accurately the regions where the detected object is located. The task is to calculate the geometric overlap between the bounding label boxes and the detected objects:
 
     Assigning a detected object to a label if IOU exceeds threshold
     Computing the degree of geometric overlap
@@ -136,8 +136,8 @@ configs_det.use_labels_as_objects=True
 ``` 
 <img src="img/23.png" alt="img23"/>
 
-Summary of Lidar based 3D Object Detection
+###  Summary of Lidar based 3D Object Detection
 
-From the project, it is understandable that for a stabilized tracking, lidar should be used . The conversion of range data to point cloud through spatial volumes, or points (or CNN networks) are important for further analysis. The usage of resnet/darknet and YOLO to convert these high dimensional point cloud representations to object detections through bounding boxes is essential for 3D object detection. Evaluating the performance with help of maximal IOU mapping ,mAP, and representing the precision/recall of the bounding boxes are essential to understand the effectiveness of Lidar based detection.
+Within the scope of this project, 3D object detection was carried out. Lidar provides very efficient information for 3D imaging of objects. In the next step, the infrastructure prepared in this project will be used to track objects.
 
 
