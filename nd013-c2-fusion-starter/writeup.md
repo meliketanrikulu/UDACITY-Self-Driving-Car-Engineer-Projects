@@ -19,7 +19,7 @@ The project can be run by running
 ``` 
 python loop_over_dataset.py
 ```
-All training/inference is done on GTX 2060 in windows 10 machine.
+
 
 ## Step-1: Compute Lidar point cloud from Range Image
 
@@ -40,7 +40,7 @@ The changes are made in "objdet_pcl.py"
 The range image sample:
 <img src="img/range_image.png" alt="range_image"/>
 
-For the next part, we use the Open3D library to display the lidar point cloud on a 3D viewer and identify 10 images from point cloud
+For the next step, we view the lidar point cloud in 3D. We use the open3D library for this.
 
     Visualize the point cloud in Open3D
     10 examples from point cloud with varying degrees of visibility
@@ -58,19 +58,8 @@ Point cloud images
 
 <img src="img/5.png" alt="img5"/>
 
-<img src="img/13.png" alt="img13"/>
 
-<img src="img/6.png" alt="img6"/>
-
-<img src="img/9.png" alt="img9"/>
-
-<img src="img/8.png" alt="img8"/>
-
-<img src="img/10.png" alt="img10"/>
-
-<img src="img/11.png" alt="img11"/>
-
-Stable features include the tail lights, the rear bumper majorly. In some cases the additional features include the headover lights, car front lights, rear window shields. These are identified through the intensity channels . The chassis of the car is the most prominent identifiable feature from the lidar perspective. The images are analysed with different settings and the rear lights are the major stable components, also the bounding boxes are correctly assigned to the cars (used from Step-3).
+Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud.
 
 ## Step-2: Creaate BEV from Lidar PCL
 
@@ -136,3 +125,19 @@ The changes for "objdet_eval.py" where the precision and recall are calculated a
 <img src="img/22.png" alt="img22"/>
 
 <img src="img/21.png" alt="img21"/>
+
+The precision recall curve is plotted showing similar results of precision and recall.
+
+<img src="img/performance.png" alt="performance"/>
+
+In the next step, we set the <br/>
+``` 
+configs_det.use_labels_as_objects=True
+``` 
+<img src="img/23.png" alt="img23"/>
+
+Summary of Lidar based 3D Object Detection
+
+From the project, it is understandable that for a stabilized tracking, lidar should be used . The conversion of range data to point cloud through spatial volumes, or points (or CNN networks) are important for further analysis. The usage of resnet/darknet and YOLO to convert these high dimensional point cloud representations to object detections through bounding boxes is essential for 3D object detection. Evaluating the performance with help of maximal IOU mapping ,mAP, and representing the precision/recall of the bounding boxes are essential to understand the effectiveness of Lidar based detection.
+
+
