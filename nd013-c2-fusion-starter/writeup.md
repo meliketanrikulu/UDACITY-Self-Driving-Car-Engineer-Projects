@@ -58,6 +58,14 @@ Point cloud images
 
 <img src="img/5.png" alt="img5"/>
 
+<img src="img/x1.png" alt="x1"/>
+<img src="img/x2.png" alt="x2"/>
+<img src="img/x3.png" alt="x3"/>
+<img src="img/x4.png" alt="x4"/>
+<img src="img/x5.png" alt="x5"/>
+<img src="img/x6.png" alt="x6"/>
+<img src="img/x7.png" alt="x7"/>
+<img src="img/x8.png" alt="x8"/>
 
 Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud.
 
