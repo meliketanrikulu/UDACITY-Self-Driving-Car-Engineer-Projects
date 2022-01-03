@@ -67,7 +67,7 @@ Point cloud images
 <img src="img/x7.png" alt="x7"/>
 <img src="img/x8.png" alt="x8"/>
 
-Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud. Above you can see how different vehicles look in point cloud. You can see that there are some losses in the lidar data in the light-permeable areas such as the windows of the vehicles.
+Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud. Above you can see how different vehicles look in point cloud. You can see that there are some losses in the lidar data in the light-permeable areas such as the wind shield of the vehicles. We see that the regions outside of this(wheel, bumper) are clearly visible with lidar
 
 ## Step-2: Creaate BEV from Lidar PCL
 
@@ -104,15 +104,13 @@ The changes are in "loop_over_dataset.py" </br>
 
 The changes for the detection are inside the "objdet_detect.py" file:
 
-<img src="img/17.png" alt="img17"/>
+<img src="img/new3.png" alt="new3"/>
 
 As the model input is a three-channel BEV map, the detected objects will be returned with coordinates and properties in the BEV coordinate space. Thus, before the detections can move along in the processing pipeline, they need to be converted into metric coordinates in vehicle space.
 
 A sample preview of the bounding box images:  </br>
 
-<img src="img/18.png" alt="img18"/>
-
-<img src="img/19.png" alt="img19"/>
+<img src="img/new.png" alt="new"/>
 
 ## Step-4: Performance detection for 3D Object Detection
 
