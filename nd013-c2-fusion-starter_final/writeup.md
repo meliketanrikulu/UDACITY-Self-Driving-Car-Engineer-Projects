@@ -1,149 +1,111 @@
-# Self-Driving Car Beta Testing Nanodegree
+# Writeup: Track 3D-Objects Over Time
 
-This is a template submission for the midterm second course in the Udacity Self-Driving Car Engineer Nanodegree Program : 3D Object Detection (Midterm).
+Please use this starter template to answer the following questions:
 
-## 3D Object detection
+### 1. Write a short recap of the four tracking steps and what you implemented there (filter, track management, association, camera fusion). Which results did you achieve? Which part of the project was most difficult for you to complete, and why?
 
-We have used the Waymo Open Dataset's real-world data and used 3d point cloud for lidar based object detection.
 
-    Configuring the ranges channel to 8 bit and view the range /intensity image (ID_S1_EX1)
-    Use the Open3D library to display the lidar point cloud on a 3d viewer and identifying 10 images from point cloud.(ID_S1_EX2)
-    Create Birds Eye View perspective (BEV) of the point cloud,assign lidar intensity values to BEV,normalize the heightmap of each BEV (ID_S2_EX1,ID_S2_EX2,ID_S2_EX3)
-    In addition to YOLO, use the repository and add parameters ,instantiate fpn resnet model(ID_S3_EX1)
-    Convert BEV coordinates into pixel coordinates and convert model output to bounding box format (ID_S3_EX2)
-    Compute intersection over union, assign detected objects to label if IOU exceeds threshold (ID_S4_EX1)
-    Compute false positives and false negatives, precision and recall(ID_S4_EX2,ID_S4_EX3)
+### 2. Do you see any benefits in camera-lidar fusion compared to lidar-only tracking (in theory and in your concrete results)? 
 
-The project can be run by running
 
-``` 
+### 3. Which challenges will a sensor fusion system face in real-life scenarios? Did you see any of these challenges in the project?
+
+
+### 4. Can you think of ways to improve your tracking results in the future?
+
+
+# Self-Driving Car Beta Testing Nanodegree 
+
+This is a template submission for the  second course in the  [Udacity Self-Driving Car Engineer Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213) : Sensor Fusion and Tracking. 
+
+
+## Sensor Fusion and Object detection
+
+We have used the [Waymo Open Dataset's](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files) real-world data and applied an extended Kalman fusion filter for tracking several vehicles in this project. The following are the tasks completed:
+- Building Kalman Filter system to track an object
+- Object tracking and updating tracks (creating and deleting)
+- Understanding the association between the data (sensor)
+- Added camera sensor fusion based on lidar fusion 
+
+The project can be run by running 
+
+```
 python loop_over_dataset.py
 ```
 
+## Step-1: Extended Kalman Filter
 
-## Step-1: Compute Lidar point cloud from Range Image
+The first step is to implement an extended Kalman filter. There are basically two steps: predict and measure. The prediction step is to predict x and P based on the motion model. The measurement step is to update x and P based on the measurement error and the covariances.
 
-In this we are first previewing the range image and convert range and intensity channels to 8 bit format. After that, we use the openCV library to stack the range and intensity channel vertically to visualize the image.
+RMSE of lidar tracking
 
-    Convert "range" channel to 8 bit
-    Convert "intensity" channel to 8 bit
-    Crop range image to +/- 90 degrees left and right of forward facing x axis
-    Stack up range and intensity channels vertically in openCV
-
-The changes are made in 'loop_over_dataset.py'
-<img src="img/1.png" alt="img1"/>
-<img src="img/2.png" alt="img2"/>
-
-The changes are made in "objdet_pcl.py"
-
-<img src="img/show_range_image_func.png" alt="img3"/>
-The range image sample:
-<img src="img/range_image.png" alt="range_image"/>
-
-For the next step, we view the lidar point cloud in 3D. We use the open3D library for this.
-
-    Visualize the point cloud in Open3D
-    10 examples from point cloud with varying degrees of visibility
-
-The changes are made in 'loop_over_dataset.py' </br>
-<img src="img/12.png" alt="img12"/>
+![img1](img/single_target_Tracking_rmse.png)
 
 
-The changes are made in "objdet_pcl.py" 
-<img src="img/show_pcl_func.png" alt="imgpcl"/>
+## Step-2: Track Management
 
-Point cloud images
+The second step is to implement the tracking lifecycle management, i.e., calculating the tracking score and switching between the initialized, tentative, and confirmed states.
 
-<img src="img/pcl2.png" alt="imgpcl"/>
+The following steps were taken for this:
 
-<img src="img/5.png" alt="img5"/>
-
-<img src="img/x1.png" alt="x1"/>
-<img src="img/x2.png" alt="x2"/>
-<img src="img/x3.png" alt="x3"/>
-<img src="img/x4.png" alt="x4"/>
-<img src="img/x5.png" alt="x5"/>
-<img src="img/x6.png" alt="x6"/>
-<img src="img/x7.png" alt="x7"/>
-<img src="img/x8.png" alt="x8"/>
-
-Lidar, which stands for Light Detection and Ranging, is a remote sensing method that uses light in the form of a pulsed laser to measure ranges. In this way, it allows us to have 3D information about the environment we are in.In this part, the lidar data is displayed as a point cloud. Above you can see how different vehicles look in point cloud. You can see that there are some losses in the lidar data in the light-permeable areas such as the wind shield of the vehicles. We see that the regions outside of this(wheel, bumper) are clearly visible with lidar
-
-## Step-2: Creaate BEV from Lidar PCL
-
-In this case, we are:
-
-    Converting the coordinates to pixel values
-    Assigning lidar intensity values to the birds eye view BEV mapping
-    Using sorted and pruned point cloud lidar from the previous task
-    Normalizing the height map in the BEV
-    Compute and map the intensity values
-
-The changes are in the 'loop_over_dataset.py' </br>
-<img src="img/14.png" alt="img14"/>
-
-The changes are also in the "objdet_pcl.py"
-<img src="img/15.png" alt="img15"/>
-
-A sample preview of the BEV: </br>
-
-<img src="img/bev_map.png" alt="imgbev"/>
-
-## Step-3: Model Based Object Detection in BEV Image
-
-Here we are using the cloned repo ,particularly the test.py file and extracting the relevant configurations from 'parse_test_configs()' and added them in the 'load_configs_model' config structure.
-
-    Instantiating the fpn resnet model from the cloned repository configs
-    Extracting 3d bounding boxes from the responses
-    Transforming the pixel to vehicle coordinates
-    Model output tuned to the bounding box format [class-id, x, y, z, h, w, l, yaw]
-
-The changes are in "loop_over_dataset.py" </br>
-
-<img src="img/16.png" alt="img16"/>
-
-The changes for the detection are inside the "objdet_detect.py" file:
-
-<img src="img/new3.png" alt="new3"/>
-
-As the model input is a three-channel BEV map, the detected objects will be returned with coordinates and properties in the BEV coordinate space. Thus, before the detections can move along in the processing pipeline, they need to be converted into metric coordinates in vehicle space.
-
-A sample preview of the bounding box images:  </br>
-
-<img src="img/new.png" alt="new"/>
-
-## Step-4: Performance detection for 3D Object Detection
-
-In this step, performance is calculated by taking the IOU between tags and detections to get false positive and false negative values. The IOU is a parameter that determines how accurately the regions where the detected object is located. The task is to calculate the geometric overlap between the bounding label boxes and the detected objects:
-
-    Assigning a detected object to a label if IOU exceeds threshold
-    Computing the degree of geometric overlap
-    For multiple matches objects/detections pair with maximum IOU are kept
-    Computing the false negative and false positive values
-    Computing precision and recall over the false positive and false negative values
-
-The changes in the code are:
-
-<img src="img/20.png" alt="img20"/>
-
-The changes for "objdet_eval.py" where the precision and recall are calculated as functions of false positives and negatives:
-
-<img src="img/22.png" alt="img22"/>
-
-<img src="img/21.png" alt="img21"/>
-
-The precision recall curve is plotted showing similar results of precision and recall.
-
-<img src="img/performance.png" alt="performance"/>
-
-In the next step, we set the <br/>
-``` 
-configs_det.use_labels_as_objects=True
-``` 
-<img src="img/23.png" alt="img23"/>
-
-###  Summary of Lidar based 3D Object Detection
-
-Within the scope of this project, 3D object detection was carried out. Lidar provides very efficient information for 3D imaging of objects. In the next step, the infrastructure prepared in this project will be used to track objects.
+- The track is first initialized with unassigned lidar calculation
+- If the scores on the track are correlated with measurement, then the corresponding scores will be increased and vice versa
+- There is a track ranking which changes the conditions of the track.
+- If the score is below certain three-point and the state balance is greater than a threshold , then the track is not removed for further consideration.
 
 
+The following image shows the rmse plot for single tracking .
+
+![step2](img/13.png)
+
+
+## Step-3: Data Association
+
+The thrid step is to implement the association of measurements to tracks and to handle unassociated tracks and measurements. We use a single nearest neighbor data association measured by Mahalanobis distance and use gating to ease associations.
+
+- We build  a matrix with all tracks and overviews open.
+- We calculate the distance of Mahalanobis Distance for each track measurement.
+- To exclude unlikely track pairs, use the hypothesis test Chi-Square.
+- We choose the pair with the smallest Mahalanobis Distance, update Kalman Filter, and delete the relation matrix with the appropriate row and column.
+
+The following image shows the MHD being applied for getting the closest track measurement:
+![img1](images/closesttrack.png)
+
+The following graph is plotted.
+
+![step3](img/15.png)
+
+
+## Step-4: Camera Sensor fusion
+
+The fourth step is to implement camera fusion. We extend the extended Kalman filter to support the non-linear transformation of the camera measurement. Calculating the Jacobian matrix is the most difficult, though it's given in the project.
+
+
+![step3_graph](img/15.png)
+
+## Difficulties Faced in Project
+
+The implementation of ekf, track management, data association, and camera-lidar fusion are all well guided in the lectures. However it was difficult to implement the camera measuring model. When projecting a 3d point into a 2d point, there are transformations in the camera axis. However, the coding of the project was discovered and the problem was solved.For the project, a pre-computed result is needed. However, the pre-computed result files do not correspond to the load filename of the loop_over_dataset.py file. For using the files, we  modified the filenames according to the pre-computed result. This is shown in the following lines in the "loop_over_dataset.py " file.
+Use camera measurement to update state X and state covariance matrix P
+
+![image](images/measure_detection.png)
+
+## Benefits in Camera-Lidar Fusion tracking over Lidar-only tracking
+
+From the project, it is understandable that for a stabilized tracking, sensor fusion should combine multiple sensors. Cameras may offer textured and color/brightness/contrast based imaages that Lidar does not provide .Lidar is extremely beneficial for low brightness /visibility or in blurry conditions such as foggy/rainy weather conditions.The most important aspect of Lidar is the spatial projection which is better than a camera.Lidar can seemlessly navigate to the required orientation. Ideally a combined approach of Resnet architectures combined with Lidar can provide better results. Inclusion of camera fusion trackign can produce a better geometric project matrix for the sensors to detect and operate on.
+The first picture below is lidar-only detection. The second picture is camera-lidar fusion detection. We can find that tracks in second picture all have slightly lower RMS error.
+
+![image](img/1.png)
+![image](img/2.png)
+
+## Real-life challenges:
+
+In real-life scenarios:
+
+* Sensor performance could be heavily affected by working environments. For example, rain, heavy fog.
+* Sensor position may be changed from its original position which affects sensor to vehicle coordinates translation.
+* More vehicles may in the lanes
+
+## Improvement opportunity:
+* Fine-tune parameters such as process noise Q, measurement noise R, initial setting for estimation error covariance P.
+* Increase frame rate to reduce uncertainty in estimation.
