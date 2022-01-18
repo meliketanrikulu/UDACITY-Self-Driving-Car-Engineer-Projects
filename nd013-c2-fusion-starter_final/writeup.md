@@ -88,7 +88,6 @@ The fourth step is to implement camera fusion. We extend the extended Kalman fil
 The implementation of ekf, track management, data association, and camera-lidar fusion are all well guided in the lectures. However it was difficult to implement the camera measuring model. When projecting a 3d point into a 2d point, there are transformations in the camera axis. However, the coding of the project was discovered and the problem was solved.For the project, a pre-computed result is needed. However, the pre-computed result files do not correspond to the load filename of the loop_over_dataset.py file. For using the files, we  modified the filenames according to the pre-computed result. This is shown in the following lines in the "loop_over_dataset.py " file.
 Use camera measurement to update state X and state covariance matrix P
 
-![image](images/measure_detection.png)
 
 ## Benefits in Camera-Lidar Fusion tracking over Lidar-only tracking
 
